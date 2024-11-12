@@ -141,18 +141,32 @@ bool TrieTree::find(std::string word)
 
 bool TrieTree::del(std::string word)
 {
+	bool res;
 	if (root)
 	{
-		bool res = root->del(word, 0);
+		res = root->del(word, 0);
 		if (res && root->is_children_null())
 			root = nullptr;
 	}
-	return false;
+	return res;
 }
+
+int menu()
+{
+    int res;
+    std::cout << "1.Добавить слово\n2.Удалить слово\n3.Проверить вхождение слова\n4.Распечатать слова с кол-вом вхождений\n5.Завершить работу программы" << std::endl;
+    std::cin >> res;
+    return res;
+}
+
 
 
 int main()
 {
+	
+	setlocale(LC_ALL, "RU");
+
+
 	std::string file_name = "tree.txt";
 	std::ifstream file(file_name);
 
@@ -167,5 +181,56 @@ int main()
 	file.close();
 	tree->print();
 	std::cout << std::endl;
+
+	std::string word;
+
+	int choice = 0;
+
+	do
+	{
+		choice = menu();
+		switch (choice)
+		{
+		case 1:
+		{
+			std::cout << "Введите слово ->";
+			std::cin >> word;
+			tree->add(word);
+			std::cout << std::endl << "Слово добавлено" << std::endl;
+			word = "";
+
+			break;
+		}
+		case 2:
+		{
+			std::cout << "Введите слово ->";
+			std::cin >> word;
+			if (tree->del(word))
+				std::cout << std::endl << "Слово удалено" << std::endl;
+			else
+				std::cout << "Слово не найдено" << std::endl;
+			word = "";
+
+			break;
+		}
+		case 3:
+		{
+			std::cout << "Введите слово ->";
+			std::cin >> word;
+			if (tree->find(word))
+				std::cout << std::endl << "Слово было найдено" << std::endl;
+			else
+				std::cout << "Слово не было найдено" << std::endl;
+			word = "";
+			break;
+		}
+		case  4:
+		{
+			tree->print();
+			std::cout << std::endl;
+			break;
+		}
+		}
+	} while (choice != 5);
 
 }
